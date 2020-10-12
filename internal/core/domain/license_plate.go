@@ -1,6 +1,7 @@
 package domain
 
 type LicensePlate struct {
-	Plate string  `json:"plate" binding:"required"`
-	Score float64 `json:"score" binding:"required"`
+	Plate string `json:"license_plate" binding:"required"`
+	Score string `json:"score" binding:"required"`
+	Model string `json:"model" binding:"required"`
 }

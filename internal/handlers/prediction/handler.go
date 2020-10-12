@@ -25,24 +25,30 @@ func NewHandler(service ports.PredictionService) *Handler {
 func (h *Handler) Execute(c *gin.Context) {
 
 	mpFile, header, err := c.Request.FormFile("file")
-
-	file, err := os.Create(header.Filename)
 	if err != nil {
-		logger.Errorf("Hubo un error creando el archivo a guardar", err)
-	}
-	defer file.Close()
-
-	_, err = io.Copy(file, mpFile)
-	if err != nil {
-		logger.Errorf("Hubo un error copiando el archivo a guardar", err)
+		logger.Errorf("There was an error getting image from request.", err)
 	}
 
-	c.String(http.StatusOK, postFileAndReturnResponse(header.Filename))
+	plate, err := h.service.Execute(mpFile, header)
 
-	err = os.Remove(header.Filename)
-	if err != nil {
-		logger.Errorf("Hubo un error borrando el archivo", err)
-	}
+	//file, err := os.Create(header.Filename)
+	//if err != nil {
+	//	logger.Errorf("Hubo un error creando el archivo a guardar", err)
+	//}
+	//defer file.Close()
+	//
+	//_, err = io.Copy(file, mpFile)
+	//if err != nil {
+	//	logger.Errorf("Hubo un error copiando el archivo a guardar", err)
+	//}
+
+	//c.String(http.StatusOK, postFileAndReturnResponse(header.Filename))
+	c.JSON(http.StatusOK, plate)
+
+	//err = os.Remove(header.Filename)
+	//if err != nil {
+	//	logger.Errorf("Hubo un error borrando el archivo", err)
+	//}
 }
 
 func postFileAndReturnResponse(filename string) string {

@@ -6,13 +6,15 @@ import (
 	"github.com/unlar/alp-evaluator/internal/handlers/ping"
 	"github.com/unlar/alp-evaluator/internal/handlers/prediction"
 	"github.com/unlar/alp-evaluator/internal/repositories/rest"
+	"github.com/unlar/alp-evaluator/internal/repositories/os"
 )
 
 var dependencies = &DependenciesDefinitions{}
 
 type DependenciesDefinitions struct {
 	//repositories
-	RestRepository ports.Repository
+	RestRepository ports.RestRepository
+	OSRepository   ports.OSRepository
 
 	//services
 	PredictionService ports.PredictionService
@@ -24,8 +26,9 @@ type DependenciesDefinitions struct {
 
 func (d *DependenciesDefinitions) Initialize() {
 	d.RestRepository = rest.NewProductionRepo()
+	d.OSRepository = os.NewRepo()
 
-	d.PredictionService = services.NewPredictionService(d.RestRepository)
+	d.PredictionService = services.NewPredictionService(d.RestRepository, d.OSRepository)
 
 	d.PingHandler = ping.NewHandler()
 	d.PredictionHandler = prediction.NewHandler(d.PredictionService)
