@@ -7,7 +7,7 @@ import (
 var router = gin.Default()
 
 func StartApp() {
-	Dependencies.Initialize()
+	dependencies.Initialize()
 	mapRoutes()
 	run("8080")
 }
@@ -17,5 +17,6 @@ func run(port string) {
 }
 
 func mapRoutes() {
-	router.GET("/ping", Dependencies.PingHandler.Ping)
+	router.GET("/ping", dependencies.PingHandler.Ping)
+	router.POST("/recognize/license_plate", dependencies.PredictionHandler.Execute)
 }
