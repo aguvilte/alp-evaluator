@@ -16,13 +16,6 @@ func NewPredictionService(restRepo ports.RestRepository, osRepo ports.OSReposito
 }
 
 func (p *predictionService) Execute(file multipart.File, header *multipart.FileHeader) (*domain.LicensePlate, error) {
-	//plate, err := p.repository.GetPrediction(file, header)
-	//if err != nil {
-	//	return nil, err
-	//}
-	//return plate, nil
-	//var plate domain.LicensePlate
-
 	err := p.osRepo.SaveFile(file, header)
 
 	plate, err := p.restRepo.GetPrediction(file, header)
